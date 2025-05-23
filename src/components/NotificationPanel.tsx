@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { X, CheckCircle, AlertTriangle, Info, Trash2 } from 'lucide-react';
 
@@ -44,6 +43,9 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ onClose, onNotifi
     },
   ]);
 
+  // Check if dark mode is active
+  const isDarkMode = document.documentElement.classList.contains('dark');
+
   const markAsRead = (id: string) => {
     setNotifications(prev =>
       prev.map(notif =>
@@ -88,24 +90,40 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ onClose, onNotifi
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-start justify-end p-4">
-      <div className="bg-white/90 backdrop-blur-md rounded-2xl border border-white/20 shadow-2xl w-full max-w-md max-h-[80vh] overflow-hidden animate-fade-in">
+      <div className={`backdrop-blur-md rounded-2xl border shadow-2xl w-full max-w-md max-h-[80vh] overflow-hidden animate-fade-in transition-colors duration-300 ${
+        isDarkMode 
+          ? 'bg-gray-800/90 border-gray-700/20' 
+          : 'bg-white/90 border-white/20'
+      }`}>
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-800">Notifications</h3>
+        <div className={`flex items-center justify-between p-6 border-b transition-colors duration-300 ${
+          isDarkMode ? 'border-gray-700' : 'border-gray-200'
+        }`}>
+          <h3 className={`text-lg font-semibold transition-colors duration-300 ${
+            isDarkMode ? 'text-gray-100' : 'text-gray-800'
+          }`}>Notifications</h3>
           <div className="flex items-center space-x-2">
             {notifications.length > 0 && (
               <button
                 onClick={clearAll}
-                className="text-sm text-gray-500 hover:text-red-500 transition-colors duration-200"
+                className={`text-sm transition-colors duration-200 ${
+                  isDarkMode 
+                    ? 'text-gray-400 hover:text-red-400' 
+                    : 'text-gray-500 hover:text-red-500'
+                }`}
               >
                 Clear all
               </button>
             )}
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-xl transition-colors duration-200"
+              className={`p-2 rounded-xl transition-colors duration-200 ${
+                isDarkMode 
+                  ? 'hover:bg-gray-700 text-gray-400' 
+                  : 'hover:bg-gray-100 text-gray-500'
+              }`}
             >
-              <X className="w-5 h-5 text-gray-500" />
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -114,11 +132,15 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ onClose, onNotifi
         <div className="overflow-y-auto max-h-[60vh]">
           {notifications.length === 0 ? (
             <div className="p-8 text-center">
-              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-8 h-8 text-gray-400" />
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
+                isDarkMode ? 'bg-gray-700' : 'bg-gray-100'
+              }`}>
+                <CheckCircle className={`w-8 h-8 ${
+                  isDarkMode ? 'text-gray-500' : 'text-gray-400'
+                }`} />
               </div>
-              <p className="text-gray-500">No notifications</p>
-              <p className="text-sm text-gray-400">All caught up!</p>
+              <p className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>No notifications</p>
+              <p className={`text-sm ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>All caught up!</p>
             </div>
           ) : (
             <div className="p-4 space-y-3">
@@ -127,8 +149,12 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ onClose, onNotifi
                   key={notification.id}
                   className={`p-4 rounded-xl border transition-all duration-200 hover:shadow-md ${
                     notification.read
-                      ? 'bg-gray-50 border-gray-200'
-                      : 'bg-white border-blue-200 shadow-sm'
+                      ? isDarkMode 
+                        ? 'bg-gray-700/50 border-gray-600' 
+                        : 'bg-gray-50 border-gray-200'
+                      : isDarkMode 
+                        ? 'bg-gray-700 border-blue-500/30 shadow-sm' 
+                        : 'bg-white border-blue-200 shadow-sm'
                   }`}
                 >
                   <div className="flex items-start space-x-3">
@@ -138,16 +164,22 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ onClose, onNotifi
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
                         <h4 className={`text-sm font-medium ${
-                          notification.read ? 'text-gray-600' : 'text-gray-800'
+                          notification.read 
+                            ? isDarkMode ? 'text-gray-400' : 'text-gray-600'
+                            : isDarkMode ? 'text-gray-200' : 'text-gray-800'
                         }`}>
                           {notification.title}
                         </h4>
-                        <span className="text-xs text-gray-400">
+                        <span className={`text-xs ${
+                          isDarkMode ? 'text-gray-500' : 'text-gray-400'
+                        }`}>
                           {formatTime(notification.timestamp)}
                         </span>
                       </div>
                       <p className={`text-sm ${
-                        notification.read ? 'text-gray-500' : 'text-gray-600'
+                        notification.read 
+                          ? isDarkMode ? 'text-gray-500' : 'text-gray-500'
+                          : isDarkMode ? 'text-gray-300' : 'text-gray-600'
                       }`}>
                         {notification.message}
                       </p>
@@ -164,7 +196,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ onClose, onNotifi
                     </div>
                     <button
                       onClick={() => deleteNotification(notification.id)}
-                      className="p-1 hover:bg-red-100 rounded-full transition-colors duration-200 opacity-0 group-hover:opacity-100"
+                      className="p-1 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-full transition-colors duration-200 opacity-0 group-hover:opacity-100"
                     >
                       <Trash2 className="w-4 h-4 text-red-500" />
                     </button>
