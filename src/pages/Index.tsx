@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Camera, Bell, Upload, X, Play, Pause, Moon, Sun } from 'lucide-react';
 import MediaUpload from '../components/MediaUpload';
@@ -34,16 +33,13 @@ const Index = () => {
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
-                <Camera className="w-6 h-6 text-white" />
-              </div>
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                  MediaScope
+                  Theft Detection
                 </h1>
                 <p className={`text-sm transition-colors duration-300 ${
                   isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                }`}>AI-Powered Media Detection</p>
+                }`}>Powered by HI</p>
               </div>
             </div>
             
