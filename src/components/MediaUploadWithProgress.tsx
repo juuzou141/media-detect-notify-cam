@@ -78,7 +78,7 @@ const MediaUploadWithProgress = () => {
       // Simulate thief detection notification
       setTimeout(() => {
         toast({
-          title: "⚠️ Thief Detected!",
+          title: "⚠️ Thief Detected",
           description: "Suspicious activity found in the uploaded video.",
           variant: "destructive",
         });

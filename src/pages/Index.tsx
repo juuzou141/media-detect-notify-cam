@@ -22,7 +22,7 @@ const Index = () => {
         setNotificationCount(prev => prev + 1);
         toast({
           title: "🚨 Live Alert!",
-          description: "Thief detected in live camera feed!",
+          description: "Thief Detected",
           variant: "destructive",
         });
       }
@@ -142,8 +142,12 @@ const Index = () => {
 
         {/* Content Area */}
         <div className="relative">
-          {activeTab === 'upload' && <MediaUploadWithProgress />}
-          {activeTab === 'detection' && <LiveDetection />}
+          <div style={{ display: activeTab === 'upload' ? 'block' : 'none' }}>
+            <MediaUploadWithProgress />
+          </div>
+          <div style={{ display: activeTab === 'detection' ? 'block' : 'none' }}>
+            <LiveDetection />
+          </div>
         </div>
       </main>
 
