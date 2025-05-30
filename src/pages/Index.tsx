@@ -1,15 +1,35 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Camera, Bell, Upload, X, Play, Pause, Moon, Sun } from 'lucide-react';
-import MediaUpload from '../components/MediaUpload';
+import MediaUploadWithProgress from '../components/MediaUploadWithProgress';
 import LiveDetection from '../components/LiveDetection';
 import NotificationPanel from '../components/NotificationPanel';
 import { useDarkMode } from '../hooks/useDarkMode';
+import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('upload');
   const [notificationCount, setNotificationCount] = useState(3);
   const [showNotifications, setShowNotifications] = useState(false);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  const { toast } = useToast();
+
+  // Simulate real-time notifications from backend
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Simulate random thief detection alerts
+      if (Math.random() > 0.95) {
+        setNotificationCount(prev => prev + 1);
+        toast({
+          title: "🚨 Live Alert!",
+          description: "Thief detected in live camera feed!",
+          variant: "destructive",
+        });
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [toast]);
 
   const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
@@ -122,7 +142,7 @@ const Index = () => {
 
         {/* Content Area */}
         <div className="relative">
-          {activeTab === 'upload' && <MediaUpload />}
+          {activeTab === 'upload' && <MediaUploadWithProgress />}
           {activeTab === 'detection' && <LiveDetection />}
         </div>
       </main>
